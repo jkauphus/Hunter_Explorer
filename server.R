@@ -5,6 +5,7 @@ library(sp)
 library(sf)
 library(tidyverse)
 library(glue)
+library(leaflet.esri)
 
 # The Backbone for the application
 
@@ -41,6 +42,15 @@ output$map <- renderLeaflet({
                   '<strong>Forest Name<strong> ', "{FS$ADMIN_FO_2}"
                 ),
                 opacity = 0.3) %>%
+    addPolygons(data = state_trust, 
+                group = 'State Trust',
+                layerId = 40,
+                color="#A5EDFB", 
+                fillColor = "#A5EDFB", 
+                fillOpacity = 0.3,
+                popup = glue(
+                  "<h4><strong> State Trust Lands </strong></h4>"),
+                opacity = 0.5) %>% 
     addPolygons(data = AZGF_units, 
                 group = 'AGFD Game Units',
                 layerId = 40,
@@ -74,7 +84,7 @@ output$map <- renderLeaflet({
                                  "<strong>COM_NAME:</strong> ", javelina$common_name, '<br/>',
                                  "<strong>DATE & TIME:</strong> ", javelina$datetime, '<br/>',
                                  "<img src='", javelina$image_url,"' width = '300px' height= '250px'>")) %>% 
-    addLayersControl(overlayGroups = c("StreetView","US Forest Service", "AGFD Game Units", "Hunt 2021", "Javelina Obs"),
+    addLayersControl(overlayGroups = c("StreetView","US Forest Service", "State Trust", "AGFD Game Units", "Hunt 2021", "Javelina Obs"),
                      options = layersControlOptions(collapsed = F))
   })
 }
